@@ -35,6 +35,7 @@ public class PlaybackActivity extends LeanbackActivity {
     private static final float GAMEPAD_TRIGGER_INTENSITY_OFF = 0.45f;
     private boolean gamepadTriggerPressed = false;
     private PlaybackFragment mPlaybackFragment;
+    private boolean mStartParentAfterPip;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,7 +128,7 @@ public class PlaybackActivity extends LeanbackActivity {
     // More: https://medium.com/s23nyc-tech/drop-in-android-video-exoplayer2-with-picture-in-picture-e2d4f8c1eb30
     @TargetApi(24)
     @SuppressWarnings("deprecation")
-    private void enterPipMode() {
+    private boolean enterPipMode() {
         // NOTE: When exiting PIP mode onPause is called immediately after onResume
 
         // Also, avoid enter pip on stop!
@@ -140,9 +141,10 @@ public class PlaybackActivity extends LeanbackActivity {
                 try {
                     if (Build.VERSION.SDK_INT >= 26) {
                         PictureInPictureParams.Builder params = new PictureInPictureParams.Builder();
-                        enterPictureInPictureMode(params.build());
+                        return enterPictureInPictureMode(params.build());
                     } else {
                         enterPictureInPictureMode();
+                        return true;
                     }
                 } catch (Exception e) {
                     // Device doesn't support picture-in-picture mode
@@ -150,6 +152,7 @@ public class PlaybackActivity extends LeanbackActivity {
                 }
             }
         }
+        return false;
     }
 
     /**
@@ -170,9 +173,13 @@ public class PlaybackActivity extends LeanbackActivity {
 
         // NOTE: block back button for PIP.
         // User pressed PIP button in the player.
-        if (!skipPip()) {
-            enterPipMode(); // NOTE: without this call app will hangs when pressing on PIP button
+        mStartParentAfterPip = !skipPip();
+        if (mStartParentAfterPip && enterPipMode()) {
+            mPlaybackFragment.blockEngine(true);
+            getViewManager().blockTop(this);
+            return;
         }
+        mStartParentAfterPip = false;
 
         if (doNotDestroy() && !skipPip()) {
             mPlaybackFragment.blockEngine(true);
@@ -248,6 +255,12 @@ public class PlaybackActivity extends LeanbackActivity {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode);
 
         mPlaybackFragment.onPIPChanged(isInPictureInPictureMode);
+
+        if (isInPictureInPictureMode && mStartParentAfterPip) {
+            mStartParentAfterPip = false;
+            // Wait until Android has pinned the player before bringing its parent forward.
+            getViewManager().startParentView(this);
+        }
     }
 
     /**

@@ -131,7 +131,7 @@ public class ViewManager {
 
     public void startParentView(Activity activity) {
         if (activity.getIntent() != null) {
-            removeTopActivity();
+            removeTop(activity);
 
             Class<?> parentActivity = getTopActivity();
 
@@ -229,12 +229,6 @@ public class ViewManager {
         // reorder activity
         mActivityStack.remove(activityClass);
         mActivityStack.push(activityClass);
-    }
-
-    private void removeTopActivity() {
-        if (!mActivityStack.isEmpty()) {
-            mActivityStack.pop();
-        }
     }
 
     private Class<? extends Activity> getTopActivity() {

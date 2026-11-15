@@ -102,35 +102,42 @@
                         android:layout_marginLeft="@dimen/lb_playback_transport_controlbar_margin_start"
                         tools:ignore="RtlHardcoded" >
 
-            <FrameLayout
-                android:id="@+id/controls_dock"
-                android:layout_width="wrap_content"
+            <HorizontalScrollView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-            />
+                android:layout_toStartOf="@+id/additional_info"
+                android:layout_marginEnd="8dp"
+                android:layout_centerVertical="true"
+                android:scrollbars="none"
+                android:focusable="false" >
+                <FrameLayout
+                    android:id="@+id/controls_dock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </HorizontalScrollView>
 
-            <RelativeLayout android:id="@+id/additional_info"
+            <LinearLayout android:id="@+id/additional_info"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layoutDirection="ltr"
                             android:layout_gravity="bottom"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
+                            android:orientation="vertical"
+                            android:gravity="end"
                             android:focusable="false" >
                 <TextView
                     android:id="@+id/quality_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     style="?attr/playbackControlsTimeStyle" />
                 <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
                     android:id="@+id/date_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_below="@+id/quality_info"
                     style="?attr/playbackControlsTimeStyle" />
-            </RelativeLayout>
+            </LinearLayout>
         </RelativeLayout>
 
         <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar
@@ -145,40 +152,47 @@
                         android:layoutDirection="ltr"
                         android:layout_marginLeft="@dimen/lb_playback_transport_controlbar_margin_start"
                         tools:ignore="RtlHardcoded" >
-            <FrameLayout
-                android:id="@+id/secondary_controls_dock"
-                android:layout_width="wrap_content"
+            <HorizontalScrollView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true" >
-            </FrameLayout>
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/time_info"
+                android:layout_marginEnd="8dp"
+                android:layout_centerVertical="true"
+                android:scrollbars="none"
+                android:focusable="false" >
+                <FrameLayout
+                    android:id="@+id/secondary_controls_dock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </HorizontalScrollView>
 
-            <RelativeLayout android:id="@+id/time_info"
+            <LinearLayout android:id="@+id/time_info"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layoutDirection="ltr"
                             android:layout_gravity="bottom"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
+                            android:orientation="vertical"
+                            android:gravity="end"
                             android:focusable="false" >
                 <TextView
                     android:id="@+id/ending_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     style="?attr/playbackControlsTimeStyle" />
 
-                <RelativeLayout android:id="@+id/current_time_wrapper"
+                <LinearLayout android:id="@+id/current_time_wrapper"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layoutDirection="ltr"
-                                android:layout_alignParentEnd="true"
-                                android:layout_below="@+id/ending_time"
+                                android:orientation="horizontal"
                                 android:focusable="false" >
                     <TextView
                         android:id="@+id/current_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toStartOf="@+id/separate_time"
                         android:layout_marginStart="@dimen/lb_playback_transport_time_margin"
                         style="?attr/playbackControlsTimeStyle" />
 
@@ -187,7 +201,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/lb_playback_time_separator"
-                        android:layout_toStartOf="@+id/total_time"
                         android:layout_marginStart="@dimen/lb_playback_transport_time_margin"
                         style="?attr/playbackControlsTimeStyle" />
 
@@ -195,11 +208,10 @@
                         android:id="@+id/total_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
                         android:layout_marginStart="@dimen/lb_playback_transport_time_margin"
                         style="?attr/playbackControlsTimeStyle" />
-                </RelativeLayout>
-            </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
         </RelativeLayout>
 
 
